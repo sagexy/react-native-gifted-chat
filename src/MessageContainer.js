@@ -32,11 +32,28 @@ export default class MessageContainer extends React.PureComponent {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.messages.length === 0 && nextProps.messages.length > 0) {
-      this.detatchKeyboardListeners();
-    } else if (this.props.messages.length > 0 && nextProps.messages.length === 0) {
-      this.attachKeyboardListeners(nextProps);
+  // componentWillReceiveProps(nextProps) {
+  //   if (this.props.messages.length === 0 && nextProps.messages.length > 0) {
+  //     this.detatchKeyboardListeners();
+  //   } else if (this.props.messages.length > 0 && nextProps.messages.length === 0) {
+  //     this.attachKeyboardListeners(nextProps);
+  //   }
+  // }
+  componentDidUpdate(prevProps: MessageContainerProps<TMessage>) {
+    if (
+      prevProps.messages &&
+      prevProps.messages.length === 0 &&
+      this.props.messages &&
+      this.props.messages.length > 0
+    ) {
+      this.detachKeyboardListeners()
+    } else if (
+      prevProps.messages &&
+      this.props.messages &&
+      prevProps.messages.length > 0 &&
+      this.props.messages.length === 0
+    ) {
+      this.attachKeyboardListeners()
     }
   }
 
