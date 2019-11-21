@@ -51,13 +51,14 @@ class GiftedChat extends React.Component {
     this._maxHeight = null;
     this._isFirstLayout = true;
     this._locale = 'en';
-    this._messages = [];
+    // this._messages = [];
 
     this.state = {
       isInitialized: false, // initialization will calculate maxHeight before rendering the chat
       composerHeight: MIN_COMPOSER_HEIGHT,
       messagesContainerHeight: null,
       typingDisabled: false,
+      messages: props.messages || []
     };
 
     this.onKeyboardWillShow = this.onKeyboardWillShow.bind(this);
@@ -106,18 +107,41 @@ class GiftedChat extends React.Component {
     const { messages, text } = this.props;
     this.setIsMounted(true);
     this.initLocale();
-    this.setMessages(messages || []);
-    this.setTextFromProp(text);
+    // this.setMessages(messages || []);
+    // this.setTextFromProp(text);
   }
 
   componentWillUnmount() {
     this.setIsMounted(false);
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps = {}) {
+  // componentWillReceiveProps(nextProps = {}) {
+  //   const { messages, text } = nextProps;
+  //   this.setMessages(messages || []);
+  //   this.setTextFromProp(text);
+  // }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
     const { messages, text } = nextProps;
-    this.setMessages(messages || []);
-    this.setTextFromProp(text);
+    if (text !== prevState.text || messages !== prevState.messages) {
+      return {
+        text: text,
+        messages: messages
+      }
+    }
+    return null
+  }
+
+  componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
+      const { messages, text, inverted } = this.props
+      if (
+        inverted === false &&
+        messages &&
+        prevProps.messages &&
+        messages.length !== prevProps.messages.length
+      ) {
+        setTimeout(() => this.scrollToBottom(false), 200)
+      }
   }
 
   initLocale() {
@@ -150,13 +174,13 @@ class GiftedChat extends React.Component {
     return this.props.text;
   }
 
-  setMessages(messages) {
-    this._messages = messages;
-  }
-
-  getMessages() {
-    return this._messages;
-  }
+  // setMessages(messages) {
+  //   this._messages = messages;
+  // }
+  //
+  // getMessages() {
+  //   return this._messages;
+  // }
 
   setMaxHeight(height) {
     this._maxHeight = height;
@@ -313,7 +337,7 @@ class GiftedChat extends React.Component {
         <MessageContainer
           {...this.props}
           invertibleScrollViewProps={this.invertibleScrollViewProps}
-          messages={this.getMessages()}
+          messages={this.state.messages}
           ref={(component) => (this._messageContainerRef = component)}
 
         />
