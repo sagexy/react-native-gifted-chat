@@ -28,7 +28,7 @@ export default class MessageContainer extends React.PureComponent {
     this.detachKeyboardListeners = this.detachKeyboardListeners.bind(this);
 
     if (props.messages.length === 0) {
-      this.attachKeyboardListeners(props);
+      this.attachKeyboardListeners();
     }
   }
 
@@ -50,22 +50,24 @@ export default class MessageContainer extends React.PureComponent {
       prevProps.messages.length > 0 &&
       this.props.messages.length === 0
     ) {
-      this.attachKeyboardListeners(this.props)
+      this.attachKeyboardListeners()
     }
   }
 
-  attachKeyboardListeners(props) {
-    Keyboard.addListener('keyboardWillShow', props.invertibleScrollViewProps.onKeyboardWillShow);
-    Keyboard.addListener('keyboardDidShow', props.invertibleScrollViewProps.onKeyboardDidShow);
-    Keyboard.addListener('keyboardWillHide', props.invertibleScrollViewProps.onKeyboardWillHide);
-    Keyboard.addListener('keyboardDidHide', props.invertibleScrollViewProps.onKeyboardDidHide);
+  attachKeyboardListeners() {
+    const { invertibleScrollViewProps: invertibleProps } = this.props;
+    Keyboard.addListener('keyboardWillShow', invertibleProps.onKeyboardWillShow);
+    Keyboard.addListener('keyboardDidShow', invertibleProps.onKeyboardDidShow);
+    Keyboard.addListener('keyboardWillHide', invertibleProps.onKeyboardWillHide);
+    Keyboard.addListener('keyboardDidHide', invertibleProps.onKeyboardDidHide);
   }
 
   detachKeyboardListeners() {
-    Keyboard.removeListener('keyboardWillShow', this.props.invertibleScrollViewProps.onKeyboardWillShow);
-    Keyboard.removeListener('keyboardDidShow', this.props.invertibleScrollViewProps.onKeyboardDidShow);
-    Keyboard.removeListener('keyboardWillHide', this.props.invertibleScrollViewProps.onKeyboardWillHide);
-    Keyboard.removeListener('keyboardDidHide', this.props.invertibleScrollViewProps.onKeyboardDidHide);
+    const { invertibleScrollViewProps: invertibleProps } = this.props;
+    Keyboard.removeListener('keyboardWillShow', invertibleProps.onKeyboardWillShow);
+    Keyboard.removeListener('keyboardDidShow', invertibleProps.onKeyboardDidShow);
+    Keyboard.removeListener('keyboardWillHide', invertibleProps.onKeyboardWillHide);
+    Keyboard.removeListener('keyboardDidHide', invertibleProps.onKeyboardDidHide);
   }
 
   renderFooter() {
