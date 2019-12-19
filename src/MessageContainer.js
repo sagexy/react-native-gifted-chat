@@ -32,6 +32,10 @@ export default class MessageContainer extends React.PureComponent {
     }
   }
 
+  componentWillUnmount() {
+    this.detachKeyboardListeners()
+  }
+
   componentDidUpdate(prevProps: MessageContainerProps<TMessage>) {
     if (
       prevProps.messages &&
@@ -46,7 +50,7 @@ export default class MessageContainer extends React.PureComponent {
       prevProps.messages.length > 0 &&
       this.props.messages.length === 0
     ) {
-      this.attachKeyboardListeners()
+      this.attachKeyboardListeners(this.props)
     }
   }
 
