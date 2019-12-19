@@ -25,20 +25,13 @@ export default class MessageContainer extends React.PureComponent {
     this.renderLoadEarlier = this.renderLoadEarlier.bind(this);
     this.renderHeaderWrapper = this.renderHeaderWrapper.bind(this);
     this.attachKeyboardListeners = this.attachKeyboardListeners.bind(this);
-    this.detatchKeyboardListeners = this.detatchKeyboardListeners.bind(this);
+    this.detachKeyboardListeners = this.detachKeyboardListeners.bind(this);
 
     if (props.messages.length === 0) {
       this.attachKeyboardListeners(props);
     }
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   if (this.props.messages.length === 0 && nextProps.messages.length > 0) {
-  //     this.detatchKeyboardListeners();
-  //   } else if (this.props.messages.length > 0 && nextProps.messages.length === 0) {
-  //     this.attachKeyboardListeners(nextProps);
-  //   }
-  // }
   componentDidUpdate(prevProps: MessageContainerProps<TMessage>) {
     if (
       prevProps.messages &&
@@ -64,7 +57,7 @@ export default class MessageContainer extends React.PureComponent {
     Keyboard.addListener('keyboardDidHide', props.invertibleScrollViewProps.onKeyboardDidHide);
   }
 
-  detatchKeyboardListeners() {
+  detachKeyboardListeners() {
     Keyboard.removeListener('keyboardWillShow', this.props.invertibleScrollViewProps.onKeyboardWillShow);
     Keyboard.removeListener('keyboardDidShow', this.props.invertibleScrollViewProps.onKeyboardDidShow);
     Keyboard.removeListener('keyboardWillHide', this.props.invertibleScrollViewProps.onKeyboardWillHide);
