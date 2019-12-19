@@ -10,10 +10,10 @@ import Color from './Color';
 export default class Composer extends React.Component {
 
   onContentSizeChange(e) {
-    const { contentSize } = e.nativeEvent;
+    const { contentSize, text } = e.nativeEvent;
 
     // Support earlier versions of React Native on Android.
-    if (!contentSize) return;
+    if (!contentSize || !text || text.indexOf('\n') >= 0) return;
 
     if (
       !this.contentSize ||
